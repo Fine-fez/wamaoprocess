@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>原料制备</title>
+    <style>
+        /* 基础样式重置 */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        /* 响应式基础设置 */
+        html {
+            font-size: 100%;
+        }
+        
+        /* 基于750px设计稿的响应式设置 */
+        @media (max-width: 750px) {
+            html {
+                font-size: 100vw / 750;
+            }
+        }
+        
+        /* 设置body背景图片 */
+        body {
+            background-image: url('../wamao_img/background1.png');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            width: 100vw;
+            height: 100vh;
+            overflow: hidden;
+            /* 相对定位，作为所有图片的定位容器 */
+            position: relative;
+            /* 适配750*1334设计稿的宽高比 */
+            max-height: 177.87vh; /* 1334/750*100 */
+        }
+        
+        /* 所有覆盖图片的通用样式 */
+        .overlay-image {
+            /* 绝对定位，覆盖在背景上 */
+            position: absolute;
+            /* 避免触摸事件影响 */
+            pointer-events: none;
+            /* 响应式图片大小 */
+            max-width: 100%;
+            height: auto;
+        }
+        
+        /* 图片31的样式 */
+        .image31 {
+            /* 确保图片在最上层 */
+            z-index: 1;
+            width: 100vw;
+        }
+
+        /* 图片36的样式 */
+        .image36 {
+            /* 确保图片在最上层 */
+            z-index: 3;
+            /* 保持原始比例 */
+            width: auto;
+            height: auto;
+            /* 向下向右移动 */
+            top: 70%;
+            left: 80%;
+            /* 启用触摸事件，使其可以被点击 */
+            pointer-events: auto;
+        }
+        
+        /* 图片11的样式 */
+        .image11 {
+            /* 确保图片在最上层 */
+            z-index: 3;
+            /* 保持原始比例 */
+            width: auto;
+            height: auto;
+            /* 向下向右移动，与image36位置一致 */
+            top: 70%;
+            left: 80%;
+            /* 默认隐藏 */
+            display: none;
+        }
+
+        /* 图片37的样式 */
+        .image37 {
+            /* 确保图片在最上层 */
+            z-index: 6;
+            /* 启用触摸事件，使其可以被点击 */
+            pointer-events: auto;
+            /* 保持原始比例 */
+            width: auto;
+            height: auto;
+            top:71%;
+        }
+        
+        /* 图片2的样式 */
+        .image2 {
+            /* 确保图片在最上层 */
+            z-index: 3;
+            /* 保持原始比例 */
+            width: auto;
+            height: auto;
+            /* 向下向右移动 */
+            top: 67%;
+            left: 40%;
+            /* 启用触摸事件，使其可以被点击 */
+            pointer-events: auto;
+            /* 添加过渡动画 */
+            transition: all 1s ease;
+        }
+        
+        /* 图片3的样式 */
+        .image3 {
+            /* 确保图片在最上层 */
+            z-index: 2;
+            /* 保持原始比例 */
+            width: auto;
+            height: auto;
+        }
+        
+        /* 图片4的样式 */
+        .image4 {
+            /* 确保图片在最上层 */
+            z-index: 5;
+        }
+        
+        /* 图片5的样式 */
+        .image5 {
+            /* 确保图片在最上层 */
+            z-index: 5;
+        }
+        
+        /* 图片6的样式 */
+        .image6 {
+            /* 确保图片在最上层 */
+            z-index: 2;
+            /* 保持原始比例 */
+            width: auto;
+            height: auto;
+            /* 设置初始位置 */
+            left: 71%;
+            top: 90%;
+            transform: translate(-50%, -50%);
+            /* 过渡动画，使移动更平滑 */
+            transition: all 1s ease;
+        }
+
+        .image10 {
+            /* 确保图片在最上层 */
+            z-index: 4;
+            /* 保持原始比例 */
+            width: auto;
+            height: auto;
+            /* 向下向右移动 */
+            top: 47%;
+            left: 60%;
+        }
+        
+        /* 进度条的样式 */
+        .jindutiao1 {
+            /* 确保图片在最上层 */
+            z-index: 1;
+        }
+        
+        /* 进度条2的样式 */
+        .jindutiao2 {
+            /* 确保图片在最上层 */
+            z-index: 1;
+            /* 保持原始比例 */
+            width: auto;
+            height: auto;
+            /* 添加更平滑的过渡动画：增加时间到2秒并使用ease-in-out缓动函数 */
+            transition: left 2s ease-in-out;
+        }
+        
+        /* 图片8的样式 */
+        .image8 {
+            /* 确保图片在合适的层级 */
+            z-index: 2;
+            /* 保持原始比例 */
+            width: auto;
+            height: auto;
+            /* 设置初始位置 */
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            /* 默认隐藏 */
+            display: none;
+            /* 添加过渡动画 */
+            transition: opacity 1s ease;
+        }
+        
+        /* 定义放大缩小动画 */
+        @keyframes pulse {
+            0% { transform: translate(-50%, -50%) scale(1); }
+            50% { transform: translate(-50%, -50%) scale(1.05); }
+            100% { transform: translate(-50%, -50%) scale(1); }
+        }
+        
+        /* 图片9的样式 */
+        .image9 {
+            /* 确保图片在合适的层级 */
+            z-index: 6;
+            /* 保持原始比例 */
+            width: auto;
+            height: auto;
+            /* 设置初始位置 */
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            /* 默认隐藏 */
+            display: none;
+            /* 添加过渡动画 */
+            transition: opacity 1s ease;
+        }
+    </style>
+    <script>
+        // 页面加载完成后执行
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('DOM加载完成，开始初始化动画');
+            // 获取图片元素
+            const image37 = document.querySelector('.image37');
+            const image36 = document.querySelector('.image36');
+            const image3 = document.querySelector('.image3');
+            const image6 = document.querySelector('.image6');
+            const image10 = document.querySelector('.image10');
+            const image2 = document.querySelector('.image2');
+            const image8 = document.querySelector('.image8');
+            const image9 = document.querySelector('.image9');
+            const jindutiao2 = document.querySelector('.jindutiao2');
+            
+            if (!image37 || !image36 || !image3 || !image6 || !image2 || !image10 || !image8 || !image9 || !jindutiao2) {
+                console.error('部分元素未找到，无法初始化动画');
+                return;
+            }
+            
+            console.log('找到所有图片元素');
+            
+            // 为image37添加点击事件监听器
+            image37.addEventListener('click', function(e) {
+                e.stopPropagation();
+                
+                console.log('点击了image37，开始执行动画序列');
+                
+                // 重置位置
+                image6.style.left = '50%';
+                image6.style.top = '50%';
+                image6.style.transform = 'translate(-50%, -50%)';
+                
+                // 强制重排，确保动画可以正常开始
+                void image6.offsetWidth;
+                
+                // 获取image37的位置
+                const rect37 = image37.getBoundingClientRect();
+                console.log('image37的位置：', rect37);
+                
+                // 第一步：移动到image37的位置
+                console.log('第一步：移动到image37的位置');
+                image6.style.left = (rect37.left + 150) + 'px';
+                image6.style.top = (rect37.bottom - 60) + 'px';
+                
+                // 第二步：到达后执行小幅度顺时针圆周运动，持续1.5秒
+                setTimeout(function() {
+                    console.log('第二步：执行小幅度顺时针圆周运动');
+                    
+                    // 圆周运动的参数
+                    const centerX = rect37.left;
+                    const centerY = rect37.bottom;
+                    const radius = 10; // 很小的半径，实现小幅度运动
+                    const duration = 1200; // 1.5秒
+                    const steps = 45; // 动画的步数
+                    const stepTime = duration / steps;
+                    let currentStep = 0;
+                    
+                    // 执行圆周运动
+                    const circularAnimation = setInterval(function() {
+                        currentStep++;
+                        
+                        // 计算当前角度（顺时针方向）
+                        const angle = (currentStep / steps) * 2 * Math.PI;
+                        
+                        // 计算圆周上的点坐标
+                        const x = centerX + Math.cos(angle) * radius;
+                        const y = centerY + Math.sin(angle) * radius;
+                        
+                        // 更新image6的位置
+                        image6.style.left = x + 'px';
+                        image6.style.top = y + 'px';
+                        
+                        // 动画结束
+                        if (currentStep >= steps) {
+                            clearInterval(circularAnimation);
+                            
+                            // 第三步：圆周运动结束后，移动到image3中央
+                            setTimeout(function() {
+                                // 获取image3的位置
+                                const rect3 = image3.getBoundingClientRect();
+                                console.log('image3的位置：', rect3);
+                                
+                                console.log('第三步：移动到image3中央偏上位置');
+                                image6.style.left = rect3.left + rect3.width / 2 + 'px';
+                                image6.style.top = (rect3.top + rect3.height / 2 - 55) + 'px';
+                                
+                                // 第四步：在image3中央停留1.5秒
+                                setTimeout(function() {
+                                    // 第五步：恢复原位
+                                    console.log('第五步：恢复原位');
+                                    image6.style.left = '71%';
+                                    image6.style.top = '90%';
+                                }, 1500); // 停留1.5秒
+                            }, 0);
+                        }
+                    }, stepTime);
+                }, 1000); // 等待第一步移动完成（1秒）
+            });
+            
+            // 为image36添加点击事件监听器
+            image36.addEventListener('click', function(e) {
+                e.stopPropagation();
+                
+                console.log('点击了image36，开始执行动画序列');
+                
+                // 重置位置
+                image6.style.left = '50%';
+                image6.style.top = '50%';
+                image6.style.transform = 'translate(-50%, -50%)';
+                
+                // 强制重排，确保动画可以正常开始
+                void image6.offsetWidth;
+                
+                // 获取image36的位置
+                const rect36 = image36.getBoundingClientRect();
+                console.log('image36的位置：', rect36);
+                
+                // 第一步：移动到image36的位置
+                console.log('第一步：移动到image36的位置');
+                image6.style.left = (rect36.left + rect36.width / 2) + 'px';
+                image6.style.top = (rect36.top + rect36.height / 2) + 'px';
+                
+                // 第二步：到达后执行小幅度逆时针圆周运动，持续1.2秒
+                setTimeout(function() {
+                    console.log('第二步：执行小幅度逆时针圆周运动');
+                    
+                    // 圆周运动的参数
+                    const centerX = rect36.left + rect36.width / 2;
+                    const centerY = rect36.top + rect36.height / 2;
+                    const radius = 8; // 很小的半径，实现小幅度运动
+                    const duration = 1200; // 1.2秒
+                    const steps = 60; // 动画的步数
+                    const stepTime = duration / steps;
+                    let currentStep = 0;
+                    
+                    // 执行逆时针圆周运动
+                    const circularAnimation = setInterval(function() {
+                        currentStep++;
+                        
+                        // 计算当前角度（逆时针方向，使用负角度）
+                        const angle = -(currentStep / steps) * 2 * Math.PI;
+                        
+                        // 计算圆周上的点坐标
+                        const x = centerX + Math.cos(angle) * radius;
+                        const y = centerY + Math.sin(angle) * radius;
+                        
+                        // 更新image6的位置
+                        image6.style.left = x + 'px';
+                        image6.style.top = y + 'px';
+                        
+                        // 动画结束
+                        if (currentStep >= steps) {
+                            clearInterval(circularAnimation);
+                            
+                            // 第三步：圆周运动结束后，将image36替换为image11
+                            console.log('第三步：替换image36为image11');
+                            
+                            // 隐藏image36
+                            image36.style.display = 'none';
+                            
+                            // 显示image11
+                            const image11 = document.querySelector('.image11');
+                            if (image11) {
+                                image11.style.display = 'block';
+                            }
+                            
+                            // 第四步：圆周运动结束后，移动到image3中央
+                            setTimeout(function() {
+                                // 获取image3的位置
+                                const rect3 = image3.getBoundingClientRect();
+                                console.log('image3的位置：', rect3);
+                                
+                                console.log('第四步：移动到image3中央偏上位置');
+                                image6.style.left = rect3.left + rect3.width / 2 + 'px';
+                                image6.style.top = (rect3.top + rect3.height / 2 - 55) + 'px';
+                                
+                                // 第五步：在image3中央停留1.5秒
+                                setTimeout(function() {
+                                    // 第六步：恢复原位
+                                    console.log('第五步：恢复原位');
+                                    image6.style.left = '71%';
+                                    image6.style.top = '90%';
+                                }, 1500); // 停留1.5秒
+                            }, 0);
+                        }
+                    }, stepTime);
+                }, 1000); // 等待第一步移动完成（1秒）
+            });
+            
+            // 为image2添加点击事件监听器
+            image2.addEventListener('click', function(e) {
+                e.stopPropagation();
+                
+                console.log('点击了image2，开始执行动画序列');
+                
+                // 存储image10的初始位置
+                const image10InitialLeft = '60%';
+                const image10InitialTop = '47%';
+                
+                // 获取image2的位置
+                const rect2 = image2.getBoundingClientRect();
+                console.log('image2的位置：', rect2);
+                
+                // 第一步：image10移动到image2的位置，在image2上方
+                console.log('第一步：image10移动到image2的位置');
+                image10.style.left = (rect2.left + rect2.width / 2) + 'px';
+                image10.style.top = (rect2.top + rect2.height / 2) + 'px';
+                image10.style.transform = 'translate(-50%, -50%)';
+                
+                // 第二步：image2与image10一起移至image3的中央（同步移动）
+                setTimeout(function() {
+                    console.log('第二步：image2与image10一起移至image3的中央（同步移动）');
+                    
+                    // 获取image3的位置
+                    const rect3 = image3.getBoundingClientRect();
+                    console.log('image3的位置：', rect3);
+                    
+                    // 计算目标位置（与之前修改后的位置一致，中央偏上）
+                    const targetLeft = (rect3.left + rect3.width / 2) + 'px';
+                    const targetTop = (rect3.top + rect3.height / 2 - 55) + 'px';
+                    
+                    // 设置相同的过渡时间，确保同步移动
+                    image2.style.transition = 'all 1s ease';
+                    image10.style.transition = 'all 1s ease';
+                    
+                    // 同时移动image2和image10到相同的目标位置
+                    image2.style.left = targetLeft;
+                    image2.style.top = targetTop;
+                    image2.style.transform = 'translate(-50%, -50%)';
+                    
+                    image10.style.left = targetLeft;
+                    image10.style.top = targetTop;
+                    image10.style.transform = 'translate(-50%, -50%)';
+                    
+                    // 第三步：在image3中央停留2秒
+                    setTimeout(function() {
+                        console.log('第三步：在image3中央停留');
+                        
+                        // 第四步：image10回到动画开始前最初始的位置
+                        setTimeout(function() {
+                            console.log('第四步：image10回到初始位置');
+                            image10.style.left = image10InitialLeft;
+                            image10.style.top = image10InitialTop;
+                            image10.style.transform = '';
+                            
+                            // 第五步：image2消失（添加淡出动画）
+                            setTimeout(function() {
+                                console.log('第五步：image2消失');
+                                image2.style.opacity = '0';
+                                image2.style.transition = 'opacity 1s ease';
+                                
+                                // 第六步：image9出现（添加淡入动画）
+                                setTimeout(function() {
+                                    console.log('第六步：image9出现');
+                                    image9.style.display = 'block';
+                                    image9.style.opacity = '0';
+                                    // 强制重排，确保动画可以正常开始
+                                    void image9.offsetWidth;
+                                    image9.style.opacity = '1';
+                                    // 添加放大缩小动画
+                                    image9.style.animation = 'pulse 1s infinite';
+                                    
+                                    // 第七步：image9在界面中保持2秒
+                                    setTimeout(function() {
+                                        console.log('第七步：image9在界面中保持2秒');
+                                        // 移除放大缩小动画
+                                        image9.style.animation = '';
+                                        
+                                        // 第八步：image9消失（添加淡出动画）
+                                        setTimeout(function() {
+                                            console.log('第八步：image9消失');
+                                            image9.style.opacity = '0';
+                                            
+                                            // 第九步：image8出现（添加淡入动画）
+                                            setTimeout(function() {
+                                                console.log('第九步：image8出现');
+                                                image8.style.display = 'block';
+                                                image8.style.opacity = '0';
+                                                // 强制重排，确保动画可以正常开始
+                                                void image8.offsetWidth;
+                                                image8.style.opacity = '1';
+                                                
+                                                // 第十步：jindutiao2向右移动五分之一界面宽
+                                                setTimeout(function() {
+                                                    console.log('第十步：jindutiao2向右移动五分之一界面宽');
+                                                    // 获取当前窗口宽度
+                                                    const windowWidth = window.innerWidth;
+                                                    // 计算需要移动的距离（五分之一界面宽）
+                                                    const moveDistance = windowWidth / 5;
+                                                    // 获取jindutiao2当前的left值
+                                                    const currentLeft = parseFloat(window.getComputedStyle(jindutiao2).left) || 0;
+                                                    // 设置新的left值
+                                                    jindutiao2.style.left = (currentLeft + moveDistance) + 'px';
+                                                    
+                                                    // 第十一步：jindutiao2移动完成后，自动跳转到process2.html
+                                                    setTimeout(function() {
+                                                        console.log('第十一步：动画完成，跳转到process2.html');
+                                                        window.location.href = 'process2.html';
+                                                    }, 2000); // 等待jindutiao2移动动画完成（与CSS过渡时间一致）
+                                                }, 1000); // 等待image8淡入完成
+                                            }, 1000); // 等待image9淡出完成
+                                        }, 1000); // 等待2秒后，开始image9淡出
+                                    }, 2000); // image9保持2秒
+                                }, 1000); // 等待image2淡出完成
+                            }, 1000); // 等待image10回到初始位置
+                        }, 2000); // 停留2秒
+                    }, 1000); // 等待移动到image3中央完成（与过渡时间一致）
+                }, 1000); // 等待image10移动到image2位置完成
+            });
+        });
+    </script>
+</head>
+<body>
+    <!-- 所有覆盖图片 -->
+    <img src="../wamao_img/image31.png" alt="image1" class="overlay-image image31">
+    <img src="../wamao_img/image36.png" alt="image1" class="overlay-image image36">
+    <img src="../wamao_img/image11.png" alt="image11" class="overlay-image image11">
+    <img src="../wamao_img/image37.png" alt="image1" class="overlay-image image37">
+    <img src="../wamao_img/image2.png" alt="image2" class="overlay-image image2">
+    <img src="../wamao_img/image3.png" alt="image3" class="overlay-image image3">
+    <img src="../wamao_img/image4.png" alt="image4" class="overlay-image image4">
+    <img src="../wamao_img/image5.png" alt="image5" class="overlay-image image5">
+    <img src="../wamao_img/image6.png" alt="image6" class="overlay-image image6">
+    <img src="../wamao_img/image10.png" alt="image6" class="overlay-image image10">
+    <img src="../wamao_img/image8.png" alt="image8" class="overlay-image image8">
+    <img src="../wamao_img/image9.png" alt="image9" class="overlay-image image9">
+    <img src="../wamao_img/jindutiao1.png" alt="jindutiao1" class="overlay-image jindutiao1">
+    <img src="../wamao_img/jindutiao2.png" alt="jindutiao2" class="overlay-image jindutiao2">
+</body>
+</html>

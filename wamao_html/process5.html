@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>上色</title>
+    <style>
+        /* 基础样式重置 */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        /* 响应式基础设置 */
+        html {
+            font-size: 100%;
+            /* 基于750px设计稿的响应式设置 */
+            @media (max-width: 750px) {
+                font-size: 100vw / 750;
+            }
+        }
+        
+        /* 设置body背景图片 */
+        body {
+            background-image: url('../wamao_img/background1.png');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            width: 100vw;
+            height: 100vh;
+            overflow: hidden;
+            /* 相对定位，作为所有图片的定位容器 */
+            position: relative;
+            /* 适配750*1334设计稿的宽高比 */
+            max-height: 177.87vh; /* 1334/750*100 */
+        }
+        
+        /* 所有覆盖图片的通用样式 */
+        .overlay-image {
+            /* 绝对定位，覆盖在背景上 */
+            position: absolute;
+            /* 宽度与界面宽度一致 */
+            width: 100%;
+            /* 高度与界面高度一致 */
+            height: 100%;
+            /* 避免触摸事件影响 */
+            pointer-events: none;
+            /* 响应式图片大小 */
+            max-width: 100%;
+            height: auto;
+        }
+        
+        /* 图片19的样式 */
+        .image19 {
+            /* 确保图片在最上层 */
+            z-index: 1;
+        }
+        
+        /* 图片20的样式 */
+        .image20 {
+            /* 确保图片在最上层 */
+            z-index: 1;
+        }
+
+        /* 图片21的样式 */
+        .image21 {
+            /* 确保图片在最上层 */
+            z-index: 1;
+        }
+
+        /* 图片22的样式 */
+        .image22 {
+            /* 确保图片在最上层 */
+            z-index: 1;
+        }
+        
+        /* 图片23的样式 */
+        .image23 {
+            /* 确保图片在最上层 */
+            z-index: 3;
+        }
+        
+        /* 进度条的样式 */
+        .jindutiao1 {
+            /* 确保图片在最上层 */
+            z-index: 2;
+        }
+        
+        /* 进度条2的样式 */
+        .jindutiao2 {
+            /* 确保图片在最上层 */
+            z-index: 2;
+            /* 保持原始比例 */
+            width: auto;
+            height: auto;
+            /* 直接位于右移界面宽度五分之一的位置 */
+            left: 37vw;
+        }
+        
+        /* 图片24的样式 */
+        .image24 {
+            /* 确保图片在最上层 */
+            z-index: 3;
+        }
+    </style>
+</head>
+<body>
+    <!-- 所有覆盖图片 -->
+    <img src="../wamao_img/image19.png" alt="image19" class="overlay-image image19">
+    <img src="../wamao_img/image20.png" alt="image20" class="overlay-image image20" style="display: none;">
+    <img src="../wamao_img/image21.png" alt="image21" class="overlay-image image21">
+    <img src="../wamao_img/image22.png" alt="image22" class="overlay-image image22">
+    <img src="../wamao_img/image23.png" alt="image23" class="overlay-image image23">
+    <img src="../wamao_img/image24.png" alt="image24" class="overlay-image image24" style="display: none;">
+    <img src="../wamao_img/jindutiao1.png" alt="jindutiao1" class="overlay-image jindutiao1">
+    <img src="../wamao_img/jindutiao2.png" alt="jindutiao2" class="overlay-image jindutiao2">
+    
+    <!-- 添加结果wamao图片容器 -->
+    <div id="resultContainer"></div>
+    
+    <script>
+        // 页面加载时读取并显示保存的wamao图片
+        window.onload = function() {
+            // 从localStorage读取保存的图片信息
+            const selectedWamaoImage = localStorage.getItem('selectedWamaoImage');
+            
+            if (selectedWamaoImage) {
+                // 创建结果图片元素
+                const wamaoImg = document.createElement('img');
+                wamaoImg.src = `../27wamao1/${selectedWamaoImage}`;
+                wamaoImg.alt = 'Result Wamao';
+                
+                // 设置样式
+                wamaoImg.style.zIndex = '20';
+                wamaoImg.style.position = 'absolute';
+                wamaoImg.style.top = '55%';
+                wamaoImg.style.left = '50%';
+                wamaoImg.style.transform = 'translate(-50%, -50%)';
+                wamaoImg.style.width = 'auto';
+                wamaoImg.style.height = 'auto';
+                wamaoImg.style.maxWidth = '80%';
+                wamaoImg.style.maxHeight = '80%';
+                wamaoImg.style.opacity = '0';
+                wamaoImg.style.transition = 'opacity 1s ease';
+                wamaoImg.style.pointerEvents = 'none';
+                
+                // 添加到容器
+                const resultContainer = document.getElementById('resultContainer');
+                resultContainer.appendChild(wamaoImg);
+                
+                // 淡入动画
+                setTimeout(() => {
+                    wamaoImg.style.opacity = '1';
+                    
+                    // 启动图片动画循环
+                    startImageAnimationLoop();
+                }, 500);
+            } else {
+                console.error('未找到保存的wamao图片信息');
+                // 即使没有找到图片，也启动动画循环
+                startImageAnimationLoop();
+            }
+        };
+        
+        // 启动图片动画循环
+        function startImageAnimationLoop() {
+            // 获取图片元素
+            const image19 = document.querySelector('.image19');
+            const image20 = document.querySelector('.image20');
+            const image23 = document.querySelector('.image23');
+            const image24 = document.querySelector('.image24');
+            
+            // 确保所有图片元素都存在
+            if (!image19 || !image20 || !image23 || !image24) {
+                console.error('缺少必要的图片元素');
+                return;
+            }
+            
+            let loopCount = 0;
+            const maxLoops = 15;
+            
+            // 动画循环函数
+            function animateLoop() {
+                if (loopCount >= maxLoops) {
+                    // 循环结束，进度条2向右移动到55vw处
+                    const jindutiao2 = document.querySelector('.jindutiao2');
+                    if (jindutiao2) {
+                        jindutiao2.style.transition = 'left 1s ease';
+                        jindutiao2.style.left = '50vw';
+                        
+                        // 1秒后跳转到process6.html
+                        setTimeout(() => {
+                            window.location.href = 'process6.html';
+                        }, 1000);
+                    }
+                    return;
+                }
+                
+                console.log(`开始第${loopCount + 1}次动画循环`);
+                
+                // 1. image23放大缩小动画（持续2秒）
+                image23.style.transition = 'transform 1s ease-in-out';
+                image23.style.display = 'block';
+                image23.style.opacity = '1';
+                
+                // 放大缩小循环
+                let scaleIndex = 0;
+                const scaleAnimation = setInterval(() => {
+                    scaleIndex++;
+                    if (scaleIndex % 2 === 0) {
+                        image23.style.transform = 'scale(1.05)';
+                    } else {
+                        image23.style.transform = 'scale(0.95)';
+                    }
+                    
+                    if (scaleIndex >= 4) { // 4秒 = 1秒/次 * 2次缩放（4次方向变化）
+                        clearInterval(scaleAnimation);
+                        image23.style.transform = 'scale(1)';
+                        
+                        // 2. 2秒后image23消失
+                        setTimeout(() => {
+                            image23.style.transition = 'opacity 0.5s ease';
+                            image23.style.opacity = '0';
+                            
+                            // 3. image19被替换成image20
+                            setTimeout(() => {
+                                image19.style.display = 'none';
+                                image20.style.display = 'block';
+                                
+                                // 4. image24出现并放大缩小动画
+                                setTimeout(() => {
+                                    image24.style.display = 'block';
+                                    image24.style.opacity = '0';
+                                    image24.style.transition = 'opacity 0.5s ease';
+                                    
+                                    setTimeout(() => {
+                                        image24.style.opacity = '1';
+                                        image24.style.transition = 'transform 1s ease-in-out';
+                                        
+                                        // image24的放大缩小动画
+                                        let scaleIndex24 = 0;
+                                        const scaleAnimation24 = setInterval(() => {
+                                            scaleIndex24++;
+                                            if (scaleIndex24 % 2 === 0) {
+                                                image24.style.transform = 'scale(1.05)';
+                                            } else {
+                                                image24.style.transform = 'scale(0.95)';
+                                            }
+                                            
+                                            if (scaleIndex24 >= 4) { // 持续4秒
+                                                clearInterval(scaleAnimation24);
+                                                image24.style.transform = 'scale(1)';
+                                                
+                                                // 重置状态，准备下一次循环
+                                                setTimeout(() => {
+                                                    image24.style.transition = 'opacity 0.5s ease';
+                                                    image24.style.opacity = '0';
+                                                    
+                                                    setTimeout(() => {
+                                                        image24.style.display = 'none';
+                                                        image20.style.display = 'none';
+                                                        image19.style.display = 'block';
+                                                        image23.style.opacity = '1';
+                                                        
+                                                        loopCount++;
+                                                        // 开始下一次循环
+                                                        setTimeout(() => {
+                                                            animateLoop();
+                                                        }, 500);
+                                                    }, 500);
+                                                }, 1000);
+                                            }
+                                        }, 500); // 1秒一次缩放变化
+                                    }, 500);
+                                }, 500);
+                            }, 500);
+                        }, 500);
+                    }
+                }, 500); // 1秒一次缩放变化
+            }
+            
+            // 开始第一次循环
+            animateLoop();
+        }
+    </script>
+</body>
+</html>

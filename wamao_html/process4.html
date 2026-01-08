@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>修整</title>
+    <style>
+        /* 基础样式重置 */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        /* 响应式基础设置 */
+        html {
+            font-size: 100%;
+            /* 基于750px设计稿的响应式设置 */
+            @media (max-width: 750px) {
+                font-size: 100vw / 750;
+            }
+        }
+        
+        /* 设置body背景图片 */
+        body {
+            background-image: url('../wamao_img/background1.png');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            width: 100vw;
+            height: 100vh;
+            overflow: hidden;
+            /* 相对定位，作为所有图片的定位容器 */
+            position: relative;
+            /* 适配750*1334设计稿的宽高比 */
+            max-height: 177.87vh; /* 1334/750*100 */
+        }
+        
+        /* 所有覆盖图片的通用样式 */
+        .overlay-image {
+            /* 绝对定位，覆盖在背景上 */
+            position: absolute;
+            /* 宽度与界面宽度一致 */
+            width: 100%;
+            /* 高度与界面高度一致 */
+            height: 100%;
+            /* 避免触摸事件影响 */
+            pointer-events: none;
+            /* 响应式图片大小 */
+            max-width: 100%;
+            height: auto;
+        }
+        
+        /* 图片7的样式 */
+        .image7 {
+            /* 确保图片在最上层 */
+            z-index: 1;
+        }
+        
+        /* 图片的样式 */
+        /* .wamao { */
+            /* 确保图片在最上层 */
+            /* z-index: 4; */
+            /* 缩小图片 */
+            /* width: 80%;
+            height: auto; */
+            /* 上移图片 */
+            /* top: -16%; */
+            /* 居中显示 往左微调了*/
+            /* left: 50%;
+            transform: translateX(-52%);
+        } */
+        
+        /* 图片的样式 */
+        .wamao {
+            /* 确保图片在最上层 */
+            z-index: 2;
+            /* 保持原始比例 */
+            width: auto;
+            height: auto;
+            /* 控制最大显示大小 */
+            max-width: 80%;
+            /* 下移图片 */
+            top: 10%;
+            /* 居中显示 */
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        
+        /* wamaoo类样式 - 对应水平滚动容器中的wamao1-9图片 */
+        .wamaoo {
+            /* 保持原始比例 */
+            width: auto;
+            height: auto;
+            /* 确保图片保持原始比例 */
+            object-fit: contain;
+            /* 控制最大显示大小 */
+            max-width: 100%;
+            /* 保持原始高度 */
+            max-height: 100%;
+        }
+        
+        .image10 {
+            /* 确保图片在最上层 */
+            z-index: 4;
+            /* 保持原始比例 */
+            width: auto;
+            height: auto;
+            /* 向下向右移动 */
+            top: 47%;
+            left: 60%;
+        }
+        
+        /* 图片5的样式 */
+        .image5 {
+            /* 确保图片在最上层 */
+            z-index: 3;
+        }
+        
+        /* 进度条的样式 */
+        .jindutiao1 {
+            /* 确保图片在最上层 */
+            z-index: 1;
+        }
+        
+        /* 进度条2的样式 */
+        .jindutiao2 {
+            /* 确保图片在最上层 */
+            z-index: 1;
+            /* 保持原始比例 */
+            width: auto;
+            height: auto;
+            /* 直接位于右移界面宽度五分之一的位置 */
+            left: 20vw;
+        }
+        
+        /* 水平滚动容器样式 */
+        .horizontal-scroll-container {
+            /* 绝对定位 */
+            position: absolute;
+            /* 位于image7下方 */
+            top: 65%;
+            /* 宽度与界面一致 */
+            width: 100%;
+            /* 设置高度 */
+            height: 30vh;
+            /* 隐藏垂直滚动条 */
+            overflow-y: hidden;
+            /* 隐藏水平滚动条但保留滚动功能 */
+            overflow-x: auto;
+            /* 调整z-index确保在正确的层级 */
+            z-index: 4;
+            /* 隐藏滚动条 */
+            -ms-overflow-style: none;  /* IE and Edge */
+            scrollbar-width: none;  /* Firefox */
+        }
+        
+        /* 滚动内容样式 */
+        .scroll-content {
+            /* 使用flex布局 */
+            display: flex;
+            /* 不换行 */
+            flex-wrap: nowrap;
+            /* 高度与容器一致 */
+            height: 100%;
+            /* 确保内容足够宽 */
+            width: max-content;
+        }
+        
+        /* 滚动内容中的图片样式 */
+        .scroll-content img {
+            /* 每张图片占容器宽度的1/3（一次显示3张） */
+            width: 33.33vw;
+            /* 保持原始比例 */
+            height: auto;
+            /* 图片间距 */
+            margin-right: 10px;
+            /* 触摸事件允许 */
+            pointer-events: auto;
+        }
+        
+        /* 隐藏滚动条（Webkit内核浏览器） */
+        .horizontal-scroll-container::-webkit-scrollbar {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <!-- 所有覆盖图片 -->
+    <img src="../wamao_img/image5.png" alt="image2" class="overlay-image image5">
+    <img src="../wamao_img/image7.png" alt="image2" class="overlay-image image7">
+
+    <!-- <img src="../wamao_img/wamao.png" alt="image3" class="overlay-image wamao"> -->
+    <img src="../27wamao1/wamao1.png" alt="image3" class="overlay-image wamao">
+    <!-- <img src="../27wamao1/wamao2.png" alt="image3" class="overlay-image wamao">
+    <img src="../27wamao1/wamao3.png" alt="image3" class="overlay-image wamao">
+    <img src="../27wamao1/wamao4.png" alt="image3" class="overlay-image wamao">
+    <img src="../27wamao1/wamao5.png" alt="image3" class="overlay-image wamao">
+    <img src="../27wamao1/wamao6.png" alt="image3" class="overlay-image wamao">
+    <img src="../27wamao1/wamao7.png" alt="image3" class="overlay-image wamao">
+    <img src="../27wamao1/wamao8.png" alt="image3" class="overlay-image wamao">
+    <img src="../27wamao1/wamao9.png" alt="image3" class="overlay-image wamao">
+    <img src="../27wamao1/wamao10.png" alt="image3" class="overlay-image wamao">
+    <img src="../27wamao1/wamao11.png" alt="image3" class="overlay-image wamao">
+    <img src="../27wamao1/wamao12.png" alt="image3" class="overlay-image wamao">
+    <img src="../27wamao1/wamao13.png" alt="image3" class="overlay-image wamao">
+    <img src="../27wamao1/wamao14.png" alt="image3" class="overlay-image wamao">
+    <img src="../27wamao1/wamao15.png" alt="image3" class="overlay-image wamao">
+    <img src="../27wamao1/wamao16.png" alt="image3" class="overlay-image wamao">
+    <img src="../27wamao1/wamao17.png" alt="image3" class="overlay-image wamao">
+    <img src="../27wamao1/wamao18.png" alt="image3" class="overlay-image wamao">
+    <img src="../27wamao1/wamao19.png" alt="image3" class="overlay-image wamao">
+    <img src="../27wamao1/wamao20.png" alt="image3" class="overlay-image wamao">
+    <img src="../27wamao1/wamao21.png" alt="image3" class="overlay-image wamao">
+    <img src="../27wamao1/wamao22.png" alt="image3" class="overlay-image wamao">
+    <img src="../27wamao1/wamao23.png" alt="image3" class="overlay-image wamao">
+    <img src="../27wamao1/wamao24.png" alt="image3" class="overlay-image wamao">
+    <img src="../27wamao1/wamao25.png" alt="image3" class="overlay-image wamao">
+    <img src="../27wamao1/wamao26.png" alt="image3" class="overlay-image wamao">
+    <img src="../27wamao1/wamao27.png" alt="image3" class="overlay-image wamao"> -->
+    <img src="../wamao_img/image10.png" alt="image4" class="overlay-image image10">
+    <img src="../wamao_img/jindutiao1.png" alt="jindutiao1" class="overlay-image jindutiao1">
+    <img src="../wamao_img/jindutiao2.png" alt="jindutiao2" class="overlay-image jindutiao2">
+    <!-- 水平滚动图片容器 -->
+    <div class="horizontal-scroll-container">
+        <div class="scroll-content">
+            <img src="../27wamao1/wamao1.png" alt="wamaoo" class="wamaoo">
+            <img src="../27wamao1/wamao2.png" alt="wamaoo" class="wamaoo">
+            <img src="../27wamao1/wamao3.png" alt="wamaoo" class="wamaoo">
+            <img src="../27wamao1/wamao4.png" alt="wamaoo" class="wamaoo">
+            <img src="../27wamao1/wamao5.png" alt="wamaoo" class="wamaoo">
+            <img src="../27wamao1/wamao6.png" alt="wamaoo" class="wamaoo">
+            <img src="../27wamao1/wamao7.png" alt="wamaoo" class="wamaoo">
+            <img src="../27wamao1/wamao8.png" alt="wamaoo" class="wamaoo">
+            <img src="../27wamao1/wamao9.png" alt="wamaoo" class="wamaoo">
+        </div>
+    </div>
+</body>
+</html>
